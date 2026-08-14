@@ -603,6 +603,17 @@ jobs:
         run: |
           cp ./res/rustdesk-${{ env.VERSION }}-0-x86_64.pkg.tar.zst ./output/${{ env.filename }}-${{ matrix.job.arch }}.pkg.tar.zst
 
+      - name: Upload installer artifact (rdgen pull path)
+        if: ${{ env.rdgen == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ github.job }}-${{ strategy.job-index }}
+          path: |
+            ./output/${{ env.filename }}-${{ matrix.job.arch }}.deb
+            ./output/${{ env.filename }}-${{ matrix.job.arch }}.rpm
+            ./output/${{ env.filename }}-suse-${{ matrix.job.arch }}.rpm
+          if-no-files-found: ignore
+          retention-days: 1
       - name: send file to rdgen server
         if: ${{ env.rdgen == 'true' }}
         uses: nick-fields/retry@v3

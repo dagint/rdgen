@@ -554,6 +554,15 @@ jobs:
           # override default build-tools version (29.0.3) -- optional
           BUILD_TOOLS_VERSION: "30.0.2"
 
+      - name: Upload installer artifact (rdgen pull path)
+        if: ${{ env.rdgen == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ github.job }}-${{ strategy.job-index }}
+          path: |
+            ./signed-apk/${{ env.filename }}-${{ matrix.job.arch }}.apk
+          if-no-files-found: ignore
+          retention-days: 1
       - name: send file to rdgen server
         if: ${{ env.rdgen == 'true' }}
         uses: nick-fields/retry@v3

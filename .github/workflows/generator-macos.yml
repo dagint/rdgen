@@ -692,6 +692,15 @@ jobs:
             exit 1
           fi
 
+      - name: Upload installer artifact (rdgen pull path)
+        if: ${{ env.rdgen == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ github.job }}-${{ strategy.job-index }}
+          path: |
+            ${{ env.filename }}-${{ matrix.job.arch }}.dmg
+          if-no-files-found: ignore
+          retention-days: 1
       - name: send file to rdgen server
         if: ${{ env.rdgen == 'true' }}
         shell: bash
